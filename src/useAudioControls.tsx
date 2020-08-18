@@ -94,25 +94,14 @@ const useAudioControls = (props: useAudioContentProps) => {
             {
                 return el.pause();
             }
-            // if (audioRef.current)
-            // {
-            //     audioRef.current.pause();
-            // }
         },
         seek: (time: number) => {
-            // function audioSeak(value: number) {
-            //     var seekto = durationState * (value / 100);
-            //     audioRef.current!.currentTime = seekto;
-            // }
-
-            // audioSeak(time);
-            const el = audioRef.current;
-            if (!el || state.duration === undefined)
-            {
-                return;
+            function audioSeak(value: number) {
+                var seekto = durationState * (value / 100);
+                audioRef.current!.currentTime = seekto;
             }
-            time = Math.min(state.duration, Math.max(0, time));
-            el.currentTime = time;
+
+            audioSeak(time);
         },
         unmute: () => {
             if (audioRef.current)
@@ -121,10 +110,6 @@ const useAudioControls = (props: useAudioContentProps) => {
             }
         },
         volume: (volume: number) => {
-            // if (audioRef.current)
-            // {
-            //     audioRef.current.volume = volume;
-            // }
             const el = audioRef.current;
             if (!el)
             {
@@ -183,7 +168,7 @@ const useAudioControls = (props: useAudioContentProps) => {
         //eslint-disable-next-line
     }, [timeState]);
 
-    const wrapEvent = <T extends React.SyntheticEvent<HTMLAudioElement, Event>>(userEvent?: (event: T) => void, proxyEvent?: (event: T) => void) => {
+    const wrapEvent = <T extends any = any>(userEvent?: (event: T) => void, proxyEvent?: (event: T) => void) => {
         return (event: T) => {
             try
             {
@@ -235,15 +220,14 @@ const useAudioControls = (props: useAudioContentProps) => {
         setBufferedState(parseTimeRanges(el.buffered))
     };
 
-    const Listeners = React.useMemo(() => ({
+    const Listeners = {
         onPlay: wrapEvent(props.onPlay, onPlay),
         onPause: wrapEvent(props.onPause, onPause),
         onVolumeChange: wrapEvent(props.onVolumeChange, onVolumeChange),
         onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
         onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
         onProgress: wrapEvent(props.onProgress, onProgress),
-        //eslint-disable-next-line
-    }), [])
+    }
 
     //Initialize states
     React.useEffect(() => {
@@ -266,29 +250,19 @@ const useAudioControls = (props: useAudioContentProps) => {
     //Append listeners
     React.useEffect(() => {
         const currentAudio = audioRef.current;
-        // function timeListener(this: HTMLAudioElement, _event: Event) {
-        //     setPercentPlayed(getPercentPlayed(this.currentTime));
-        //     setTimeState(this.currentTime);
-        // }
-        // function durationChange(this: HTMLAudioElement, _event: Event) {
-        //     setDurationState(this.duration);
-        // }
         if (currentAudio)
         {
-            // currentAudio.addEventListener("timeupdate", timeListener);
-            // currentAudio.addEventListener("durationchange", durationChange);
             currentAudio.addEventListener('play', (e) => Listeners.onPlay(e as any))
             currentAudio.addEventListener('pause', (e) => Listeners.onPause(e as any))
-            currentAudio.addEventListener('durationchange', (e) => Listeners.onDurationChange(e as any))
+            currentAudio.addEventListener('durationchange', e => Listeners.onDurationChange(e as any))
             currentAudio.addEventListener('progress', (e) => Listeners.onProgress(e as any))
-            currentAudio.addEventListener('timeupdate', (e) => Listeners.onTimeUpdate(e as any))
+            currentAudio.addEventListener('timeupdate', e => Listeners.onTimeUpdate(e as any)
+            )
             currentAudio.addEventListener('volumechange', (e) => Listeners.onVolumeChange(e as any))
         }
         return () => {
             if (currentAudio)
             {
-                // currentAudio.removeEventListener("timeupdate", timeListener);
-                // currentAudio.removeEventListener("durationchange", durationChange);
                 currentAudio.removeEventListener('play', (e) => Listeners.onPlay(e as any))
                 currentAudio.removeEventListener('pause', (e) => Listeners.onPause(e as any))
                 currentAudio.removeEventListener('durationchange', (e) => Listeners.onDurationChange(e as any))
@@ -306,11 +280,8 @@ const useAudioControls = (props: useAudioContentProps) => {
         time: timeState,
         percentPlayed: percentPlayed,
         duration: durationState,
-        // muted: audioRef.current?.muted || false,
         muted: muteState,
-        // paused: audioRef.current?.paused || true,
         paused: pausedState,
-        // volume: audioRef.current?.volume || 0,
         volume: volumeState,
     };
 
