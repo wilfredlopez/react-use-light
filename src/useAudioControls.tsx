@@ -234,8 +234,17 @@ const useAudioControls = (props: useAudioContentProps) => {
         const el = audioRef.current!;
         if (!el)
         {
+            if (process.env.NODE_ENV !== "production")
+            {
+                console.error(
+                    "useAudio() ref to <audio> element is empty at mount. " +
+                    "It seem you have not rendered the audio element, which it " +
+                    "returns as the first argument const [audio] = useAudio(...).",
+                );
+            }
             return;
         }
+
 
         setVolumeState(el.volume)
         setMuteState(el.muted)
