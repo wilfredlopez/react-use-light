@@ -1,7 +1,7 @@
 {
   "name": "react-use-light",
   "version": "1.0.0",
-  "description": "React Hook for playing audio",
+  "description": "React use without external dependencies.",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "sideEffects": false,
