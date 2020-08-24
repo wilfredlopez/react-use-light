@@ -5,8 +5,6 @@ export { default as createStateContext } from "./createStateContext";
 export { default as useAsync } from "./useAsync";
 export { default as useAsyncFn } from "./useAsyncFn";
 export { default as useAudio } from "./useAudio";
-//WILFRED VERSION
-export { default as useAudioControls } from "./useAudioControls";
 export { default as useBattery } from "./useBattery";
 export { default as useBoolean } from "./useBoolean";
 export { default as useClickAway } from "./useClickAway";
@@ -100,3 +98,7 @@ export { useFirstMountState } from "./useFirstMountState";
 export { default as useSet } from "./useSet";
 export { createGlobalState } from "./createGlobalState";
 export { useHash } from "./useHash";
+
+//CUSTOM HOOKS ONLY react-use-light
+export { default as useDate, formatDate } from "./useDate";
+export { default as useAudioControls } from "./useAudioControls";
