@@ -1,5 +1,5 @@
-import { Locale } from "./locale";
-import { KeyCombo } from "./keyCombo";
+import { Locale } from './locale';
+import { KeyCombo } from './keyCombo';
 
 interface KeyboardContext {
   global: any;
@@ -19,36 +19,31 @@ export class Keyboard {
   Locale = Locale;
   KeyCombo = KeyCombo;
   _locale: any;
-  _currentContext = "";
+  _currentContext = '';
   _contexts: KeyboardContext = {} as any;
   _listeners: ListenerI[] = [];
   _appliedListeners: any[] = [];
   _locales: { [key: string]: any } = {};
   _targetElement = null;
   _targetWindow = null;
-  _targetPlatform = "";
-  _targetUserAgent = "";
+  _targetPlatform = '';
+  _targetUserAgent = '';
   _isModernBrowser = false;
   _targetKeyDownBinding: any = null;
   _targetKeyUpBinding: any = null;
   _targetResetBinding: any = null;
   _paused = false;
-  constructor(
-    targetWindow?: any,
-    targetElement?: any,
-    targetPlatform?: any,
-    targetUserAgent?: any,
-  ) {
+  constructor(targetWindow?: any, targetElement?: any, targetPlatform?: any, targetUserAgent?: any) {
     this._locale = null;
-    this._currentContext = "";
+    this._currentContext = '';
     this._contexts = {} as any;
     this._listeners = [];
     this._appliedListeners = [];
     this._locales = {};
     this._targetElement = null;
     this._targetWindow = null;
-    this._targetPlatform = "";
-    this._targetUserAgent = "";
+    this._targetPlatform = '';
+    this._targetUserAgent = '';
     this._isModernBrowser = false;
     this._targetKeyDownBinding = null;
     this._targetKeyUpBinding = null;
@@ -63,12 +58,12 @@ export class Keyboard {
       targetUserAgent,
     };
 
-    this.setContext("global");
+    this.setContext('global');
   }
 
   setLocale(localeName: string | Locale, localeBuilder) {
     let locale: Locale | null = null;
-    if (typeof localeName === "string") {
+    if (typeof localeName === 'string') {
       if (localeBuilder) {
         locale = new Locale(localeName);
         localeBuilder(locale, this._targetPlatform, this._targetUserAgent);
@@ -94,24 +89,15 @@ export class Keyboard {
     return this._locales[localName as string] || null;
   }
 
-  bind(
-    keyComboStr: any,
-    pressHandler: any,
-    releaseHandler: any,
-    preventRepeatByDefault?: any,
-  ) {
-    if (keyComboStr === null || typeof keyComboStr === "function") {
+  bind(keyComboStr: any, pressHandler: any, releaseHandler: any, preventRepeatByDefault?: any) {
+    if (keyComboStr === null || typeof keyComboStr === 'function') {
       preventRepeatByDefault = releaseHandler;
       releaseHandler = pressHandler;
       pressHandler = keyComboStr;
       keyComboStr = null;
     }
 
-    if (
-      keyComboStr &&
-      typeof keyComboStr === "object" &&
-      typeof keyComboStr.length === "number"
-    ) {
+    if (keyComboStr && typeof keyComboStr === 'object' && typeof keyComboStr.length === 'number') {
       for (let i = 0; i < keyComboStr.length; i += 1) {
         this.bind(keyComboStr[i], pressHandler, releaseHandler);
       }
@@ -130,27 +116,12 @@ export class Keyboard {
     return this;
   }
 
-  addListener(
-    keyComboStr,
-    pressHandler,
-    releaseHandler,
-    preventRepeatByDefault,
-  ) {
-    return this.bind(
-      keyComboStr,
-      pressHandler,
-      releaseHandler,
-      preventRepeatByDefault,
-    );
+  addListener(keyComboStr, pressHandler, releaseHandler, preventRepeatByDefault) {
+    return this.bind(keyComboStr, pressHandler, releaseHandler, preventRepeatByDefault);
   }
 
   on(keyComboStr, pressHandler, releaseHandler, preventRepeatByDefault) {
-    return this.bind(
-      keyComboStr,
-      pressHandler,
-      releaseHandler,
-      preventRepeatByDefault,
-    );
+    return this.bind(keyComboStr, pressHandler, releaseHandler, preventRepeatByDefault);
   }
 
   bindPress(keyComboStr, pressHandler, preventRepeatByDefault) {
@@ -162,17 +133,13 @@ export class Keyboard {
   }
 
   unbind(keyComboStr, pressHandler, releaseHandler) {
-    if (keyComboStr === null || typeof keyComboStr === "function") {
+    if (keyComboStr === null || typeof keyComboStr === 'function') {
       releaseHandler = pressHandler;
       pressHandler = keyComboStr;
       keyComboStr = null;
     }
 
-    if (
-      keyComboStr &&
-      typeof keyComboStr === "object" &&
-      typeof keyComboStr.length === "number"
-    ) {
+    if (keyComboStr && typeof keyComboStr === 'object' && typeof keyComboStr.length === 'number') {
       for (let i = 0; i < keyComboStr.length; i += 1) {
         this.unbind(keyComboStr[i], pressHandler, releaseHandler);
       }
@@ -182,13 +149,15 @@ export class Keyboard {
     for (let i = 0; i < this._listeners.length; i += 1) {
       const listener = this._listeners[i];
 
-      const comboMatches = !keyComboStr && !listener.keyCombo ||
-        listener.keyCombo && listener.keyCombo.isEqual(keyComboStr);
-      const pressHandlerMatches = !pressHandler && !releaseHandler ||
-        !pressHandler && !listener.pressHandler ||
+      const comboMatches =
+        (!keyComboStr && !listener.keyCombo) || (listener.keyCombo && listener.keyCombo.isEqual(keyComboStr));
+      const pressHandlerMatches =
+        (!pressHandler && !releaseHandler) ||
+        (!pressHandler && !listener.pressHandler) ||
         pressHandler === listener.pressHandler;
-      const releaseHandlerMatches = !pressHandler && !releaseHandler ||
-        !releaseHandler && !listener.releaseHandler ||
+      const releaseHandlerMatches =
+        (!pressHandler && !releaseHandler) ||
+        (!releaseHandler && !listener.releaseHandler) ||
         releaseHandler === listener.releaseHandler;
 
       if (comboMatches && pressHandlerMatches && releaseHandlerMatches) {
@@ -227,12 +196,7 @@ export class Keyboard {
     this._listeners = context.listeners;
 
     this.stop();
-    this.watch(
-      context.targetWindow,
-      context.targetElement,
-      context.targetPlatform,
-      context.targetUserAgent,
-    );
+    this.watch(context.targetWindow, context.targetElement, context.targetPlatform, context.targetUserAgent);
 
     return this;
   }
@@ -255,25 +219,24 @@ export class Keyboard {
   watch(targetWindow, targetElement, targetPlatform, targetUserAgent) {
     this.stop();
 
-    const win = typeof globalThis !== "undefined"
-      ? globalThis
-      : typeof global !== "undefined"
-      ? global
-      : typeof window !== "undefined"
-      ? window
-      : {} as any;
+    const win =
+      typeof globalThis !== 'undefined'
+        ? globalThis
+        : typeof global !== 'undefined'
+        ? global
+        : typeof window !== 'undefined'
+        ? window
+        : ({} as any);
 
     if (!targetWindow) {
       if (!win.addEventListener && !win.attachEvent) {
-        throw new Error(
-          "Cannot find window functions addEventListener or attachEvent.",
-        );
+        throw new Error('Cannot find window functions addEventListener or attachEvent.');
       }
       targetWindow = win;
     }
 
     // Handle element bindings where a target window is not passed
-    if (typeof targetWindow.nodeType === "number") {
+    if (typeof targetWindow.nodeType === 'number') {
       targetUserAgent = targetPlatform;
       targetPlatform = targetElement;
       targetElement = targetWindow;
@@ -281,24 +244,17 @@ export class Keyboard {
     }
 
     if (!targetWindow.addEventListener && !targetWindow.attachEvent) {
-      throw new Error(
-        "Cannot find addEventListener or attachEvent methods on targetWindow.",
-      );
+      throw new Error('Cannot find addEventListener or attachEvent methods on targetWindow.');
     }
 
     this._isModernBrowser = !!targetWindow.addEventListener;
 
-    const userAgent =
-      targetWindow.navigator && targetWindow.navigator.userAgent || "";
-    const platform =
-      targetWindow.navigator && targetWindow.navigator.platform || "";
+    const userAgent = (targetWindow.navigator && targetWindow.navigator.userAgent) || '';
+    const platform = (targetWindow.navigator && targetWindow.navigator.platform) || '';
 
-    targetElement && targetElement !== null ||
-      (targetElement = targetWindow.document);
-    targetPlatform && targetPlatform !== null ||
-      (targetPlatform = platform);
-    targetUserAgent && targetUserAgent !== null ||
-      (targetUserAgent = userAgent);
+    (targetElement && targetElement !== null) || (targetElement = targetWindow.document);
+    (targetPlatform && targetPlatform !== null) || (targetPlatform = platform);
+    (targetUserAgent && targetUserAgent !== null) || (targetUserAgent = userAgent);
 
     this._targetKeyDownBinding = (event) => {
       this.pressKey(event.keyCode, event);
@@ -311,10 +267,10 @@ export class Keyboard {
       this.releaseAllKeys(event);
     };
 
-    this._bindEvent(targetElement, "keydown", this._targetKeyDownBinding);
-    this._bindEvent(targetElement, "keyup", this._targetKeyUpBinding);
-    this._bindEvent(targetWindow, "focus", this._targetResetBinding);
-    this._bindEvent(targetWindow, "blur", this._targetResetBinding);
+    this._bindEvent(targetElement, 'keydown', this._targetKeyDownBinding);
+    this._bindEvent(targetElement, 'keyup', this._targetKeyUpBinding);
+    this._bindEvent(targetWindow, 'focus', this._targetResetBinding);
+    this._bindEvent(targetWindow, 'blur', this._targetResetBinding);
 
     this._targetElement = targetElement;
     this._targetWindow = targetWindow;
@@ -333,14 +289,10 @@ export class Keyboard {
   stop() {
     if (!this._targetElement || !this._targetWindow) return;
 
-    this._unbindEvent(
-      this._targetElement,
-      "keydown",
-      this._targetKeyDownBinding,
-    );
-    this._unbindEvent(this._targetElement, "keyup", this._targetKeyUpBinding);
-    this._unbindEvent(this._targetWindow, "focus", this._targetResetBinding);
-    this._unbindEvent(this._targetWindow, "blur", this._targetResetBinding);
+    this._unbindEvent(this._targetElement, 'keydown', this._targetKeyDownBinding);
+    this._unbindEvent(this._targetElement, 'keyup', this._targetKeyUpBinding);
+    this._unbindEvent(this._targetWindow, 'focus', this._targetResetBinding);
+    this._unbindEvent(this._targetWindow, 'blur', this._targetResetBinding);
 
     this._targetWindow = null;
     this._targetElement = null;
@@ -350,7 +302,7 @@ export class Keyboard {
 
   pressKey(keyCode, event) {
     if (this._paused) return this;
-    if (!this._locale) throw new Error("Locale not set");
+    if (!this._locale) throw new Error('Locale not set');
 
     this._locale.pressKey(keyCode);
     this._applyBindings(event);
@@ -360,7 +312,7 @@ export class Keyboard {
 
   releaseKey(keyCode, event) {
     if (this._paused) return this;
-    if (!this._locale) throw new Error("Locale not set");
+    if (!this._locale) throw new Error('Locale not set');
 
     this._locale.releaseKey(keyCode);
     this._clearBindings(event);
@@ -370,7 +322,7 @@ export class Keyboard {
 
   releaseAllKeys(event?: any) {
     if (this._paused) return this;
-    if (!this._locale) throw new Error("Locale not set");
+    if (!this._locale) throw new Error('Locale not set');
 
     this._locale.pressedKeys.length = 0;
     this._clearBindings(event);
@@ -402,13 +354,13 @@ export class Keyboard {
   _bindEvent(targetElement, eventName, handler) {
     return this._isModernBrowser
       ? targetElement.addEventListener(eventName, handler, false)
-      : targetElement.attachEvent("on" + eventName, handler);
+      : targetElement.attachEvent('on' + eventName, handler);
   }
 
   _unbindEvent(targetElement, eventName, handler) {
     return this._isModernBrowser
       ? targetElement.removeEventListener(eventName, handler, false)
-      : targetElement.detachEvent("on" + eventName, handler);
+      : targetElement.detachEvent('on' + eventName, handler);
   }
 
   _getGroupedListeners() {
@@ -416,34 +368,31 @@ export class Keyboard {
     const listenerGroupMap: any[] = [];
 
     let listeners = this._listeners;
-    if (this._currentContext !== "global") {
+    if (this._currentContext !== 'global') {
       listeners = [...listeners, ...this._contexts.global.listeners];
     }
 
-    listeners.sort(
-      (a, b) =>
-        (b.keyCombo ? b.keyCombo.keyNames.length : 0) -
-        (a.keyCombo ? a.keyCombo.keyNames.length : 0),
-    ).forEach((l) => {
-      let mapIndex = -1;
-      for (let i = 0; i < listenerGroupMap.length; i += 1) {
-        if (
-          listenerGroupMap[i] === null && l.keyCombo === null ||
-          listenerGroupMap[i] !== null &&
-            listenerGroupMap[i].isEqual(l.keyCombo)
-        ) {
-          mapIndex = i;
+    listeners
+      .sort((a, b) => (b.keyCombo ? b.keyCombo.keyNames.length : 0) - (a.keyCombo ? a.keyCombo.keyNames.length : 0))
+      .forEach((l) => {
+        let mapIndex = -1;
+        for (let i = 0; i < listenerGroupMap.length; i += 1) {
+          if (
+            (listenerGroupMap[i] === null && l.keyCombo === null) ||
+            (listenerGroupMap[i] !== null && listenerGroupMap[i].isEqual(l.keyCombo))
+          ) {
+            mapIndex = i;
+          }
         }
-      }
-      if (mapIndex === -1) {
-        mapIndex = listenerGroupMap.length;
-        listenerGroupMap.push(l.keyCombo);
-      }
-      if (!listenerGroups[mapIndex]) {
-        listenerGroups[mapIndex] = [];
-      }
-      listenerGroups[mapIndex].push(l);
-    });
+        if (mapIndex === -1) {
+          mapIndex = listenerGroupMap.length;
+          listenerGroupMap.push(l.keyCombo);
+        }
+        if (!listenerGroups[mapIndex]) {
+          listenerGroups[mapIndex] = [];
+        }
+        listenerGroups[mapIndex].push(l);
+      });
 
     return listenerGroups;
   }
@@ -467,16 +416,12 @@ export class Keyboard {
 
       if (
         keyCombo === null ||
-        keyCombo.check(pressedKeys) &&
-          activeTargetKeys.some((k) => keyCombo.keyNames.includes(k))
+        (keyCombo.check(pressedKeys) && activeTargetKeys.some((k) => keyCombo.keyNames.includes(k)))
       ) {
         for (let j = 0; j < listeners.length; j += 1) {
           let listener: any = listeners[j];
 
-          if (
-            !listener.executingHandler && listener.pressHandler &&
-            !listener.preventRepeat
-          ) {
+          if (!listener.executingHandler && listener.pressHandler && !listener.preventRepeat) {
             listener.executingHandler = true;
             listener.pressHandler.call(this, event);
             listener.executingHandler = false;
@@ -530,9 +475,10 @@ export class Keyboard {
   _handleCommandBug(event, platform) {
     // On Mac when the command key is kept pressed, keyup is not triggered for any other key.
     // In this case force a keyup for non-modifier keys directly after the keypress.
-    const modifierKeys = ["shift", "ctrl", "alt", "capslock", "tab", "command"];
+    const modifierKeys = ['shift', 'ctrl', 'alt', 'capslock', 'tab', 'command'];
     if (
-      platform.match("Mac") && this._locale.pressedKeys.includes("command") &&
+      platform.match('Mac') &&
+      this._locale.pressedKeys.includes('command') &&
       !modifierKeys.includes(this._locale.getKeyNames(event.keyCode)[0])
     ) {
       this._targetKeyUpBinding(event);
