@@ -3,40 +3,29 @@ export class KeyCombo {
   subCombos: Array<string[]>;
   keyNames: string[];
 
-  comboDeliminator = ">";
-  keyDeliminator = "+";
+  comboDeliminator = '>';
+  keyDeliminator = '+';
   constructor(keyComboStr) {
     this.sourceStr = keyComboStr;
     this.subCombos = this.parseComboStr(keyComboStr);
-    this.keyNames = this.subCombos.reduce(
-      (memo, nextSubCombo) => memo.concat(nextSubCombo),
-      [],
-    );
+    this.keyNames = this.subCombos.reduce((memo, nextSubCombo) => memo.concat(nextSubCombo), []);
   }
 
   check(pressedKeyNames: string[]) {
     let startingKeyNameIndex = 0;
     for (let i = 0; i < this.subCombos.length; i += 1) {
-      startingKeyNameIndex = this._checkSubCombo(
-        this.subCombos[i],
-        startingKeyNameIndex,
-        pressedKeyNames,
-      );
+      startingKeyNameIndex = this._checkSubCombo(this.subCombos[i], startingKeyNameIndex, pressedKeyNames);
       if (startingKeyNameIndex === -1) return false;
     }
     return true;
   }
 
   isEqual(otherKeyCombo: string | KeyCombo) {
-    if (
-      !otherKeyCombo ||
-      typeof otherKeyCombo !== "string" &&
-        typeof otherKeyCombo !== "object"
-    ) {
+    if (!otherKeyCombo || (typeof otherKeyCombo !== 'string' && typeof otherKeyCombo !== 'object')) {
       return false;
     }
 
-    if (typeof otherKeyCombo === "string") {
+    if (typeof otherKeyCombo === 'string') {
       otherKeyCombo = new KeyCombo(otherKeyCombo);
     }
 
@@ -82,13 +71,13 @@ export class KeyCombo {
   _splitStr(str: string, deliminator: string) {
     const s = str;
     const d = deliminator;
-    let c = "";
+    let c = '';
     const ca: string[] = [];
 
     for (let ci = 0; ci < s.length; ci += 1) {
-      if (ci > 0 && s[ci] === d && s[ci - 1] !== "\\") {
+      if (ci > 0 && s[ci] === d && s[ci - 1] !== '\\') {
         ca.push(c.trim());
-        c = "";
+        c = '';
         ci += 1;
       }
       c += s[ci];
@@ -98,23 +87,16 @@ export class KeyCombo {
     return ca;
   }
 
-  _checkSubCombo(
-    subCombo: string[],
-    startingKeyNameIndex: number,
-    pressedKeyNames: string[],
-  ) {
+  _checkSubCombo(subCombo: string[], startingKeyNameIndex: number, pressedKeyNames: string[]) {
     subCombo = subCombo.slice(0);
     pressedKeyNames = pressedKeyNames.slice(startingKeyNameIndex);
 
     let endIndex = startingKeyNameIndex;
     for (let i = 0; i < subCombo.length; i += 1) {
       let keyName = subCombo[i];
-      if (keyName[0] === "\\") {
+      if (keyName[0] === '\\') {
         const escapedKeyName = keyName.slice(1);
-        if (
-          escapedKeyName === this.comboDeliminator ||
-          escapedKeyName === this.keyDeliminator
-        ) {
+        if (escapedKeyName === this.comboDeliminator || escapedKeyName === this.keyDeliminator) {
           keyName = escapedKeyName;
         }
       }

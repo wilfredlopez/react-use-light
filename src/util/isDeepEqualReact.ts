@@ -1,14 +1,14 @@
 export function isDeepEqualReact(a: any, b: any) {
   if (a === b) return true;
 
-  if (a && b && typeof a == "object" && typeof b == "object") {
+  if (a && b && typeof a == 'object' && typeof b == 'object') {
     if (a.constructor !== b.constructor) return false;
 
     let length: number, i: number, keys: string[];
     if (Array.isArray(a)) {
       length = a.length;
-      if (length != b.length) return false;
-      for (i = length; i-- !== 0;) {
+      if (length !== b.length) return false;
+      for (i = length; i-- !== 0; ) {
         if (!isDeepEqualReact(a[i], b[i])) return false;
       }
       return true;
@@ -17,14 +17,10 @@ export function isDeepEqualReact(a: any, b: any) {
     if (a.constructor === RegExp) {
       return a.source === b.source && a.flags === b.flags;
     }
-    if (
-      a.valueOf !== Object.prototype.valueOf
-    ) {
+    if (a.valueOf !== Object.prototype.valueOf) {
       return a.valueOf() === b.valueOf();
     }
-    if (
-      a.toString !== Object.prototype.toString
-    ) {
+    if (a.toString !== Object.prototype.toString) {
       return a.toString() === b.toString();
     }
 
@@ -32,14 +28,14 @@ export function isDeepEqualReact(a: any, b: any) {
     length = keys.length;
     if (length !== Object.keys(b).length) return false;
 
-    for (i = length; i-- !== 0;) {
+    for (i = length; i-- !== 0; ) {
       if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
     }
 
-    for (i = length; i-- !== 0;) {
+    for (i = length; i-- !== 0; ) {
       var key: string = keys[i];
 
-      if (key === "_owner" && a.$$typeof) {
+      if (key === '_owner' && a.$$typeof) {
         // React-specific: avoid traversing React elements' _owner.
         //  _owner contains circular references
         // and is not needed when comparing the actual elements (and not their owners)
