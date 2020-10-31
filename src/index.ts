@@ -105,3 +105,4 @@ export { default as useAudioControls } from './useAudioControls';
 export { default as SkeletonElement, SkeletonProps, SkeletonType } from './SkeletonElement';
 export { default as createContextHook } from './createContextHook';
 export { default as combineReducers } from './combineReducers';
+export { RouteGetterGenerator, RouteGetterParams as Params, RouterGetterRecord } from './util/RouteGetterGenerator';
