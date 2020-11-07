@@ -143,7 +143,7 @@ describe(useLocalStorage, () => {
     );
 
     const [, setFoo] = result.current;
-    act(() => setFoo(state => ({ ...state!, fizz: 'buzz' })));
+    act(() => setFoo((state) => ({ ...state!, fizz: 'buzz' })));
     rerender();
 
     const [value] = result.current;

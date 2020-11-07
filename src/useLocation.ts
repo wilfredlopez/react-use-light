@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import { isClient, off, on } from './util';
 
-const patchHistoryMethod = method => {
+const patchHistoryMethod = (method) => {
   const original = history[method];
 
-  history[method] = function(state) {
+  history[method] = function (state) {
     const result = original.apply(this, arguments);
     const event = new Event(method.toLowerCase());
 
@@ -22,9 +22,9 @@ if (isClient) {
   patchHistoryMethod('replaceState');
 }
 
-export interface LocationSensorState {
+export interface LocationSensorState<S extends {} = {}> {
   trigger: string;
-  state?: any;
+  state?: S;
   length?: number;
   hash?: string;
   host?: string;
@@ -37,12 +37,12 @@ export interface LocationSensorState {
   search?: string;
 }
 
-const useLocationServer = (): LocationSensorState => ({
+const useLocationServer = <State extends {}>(): LocationSensorState<State> => ({
   trigger: 'load',
   length: 1,
 });
 
-const buildState = (trigger: string) => {
+const buildState = <State extends {}>(trigger: string) => {
   const { state, length } = history;
 
   const { hash, host, hostname, href, origin, pathname, port, protocol, search } = location;
@@ -60,10 +60,10 @@ const buildState = (trigger: string) => {
     port,
     protocol,
     search,
-  };
+  } as LocationSensorState<State>;
 };
 
-const useLocationBrowser = (): LocationSensorState => {
+const useLocationBrowser = <State extends {}>(): LocationSensorState<State> => {
   const [state, setState] = useState(buildState('load'));
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const useLocationBrowser = (): LocationSensorState => {
     };
   }, []);
 
-  return state;
+  return state as LocationSensorState<State>;
 };
 
 const hasEventConstructor = typeof Event === 'function';
