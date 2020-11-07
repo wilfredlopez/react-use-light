@@ -1,5 +1,5 @@
 import { RouteGetterGenerator, RouterGetterRecord } from '../src/index';
-type RouteKeys = 'home' | 'profile';
+type RouteKeys = 'home' | 'profile' | 'other';
 
 interface MyRouteType extends RouterGetterRecord<RouteKeys> {
   home: {
@@ -9,6 +9,13 @@ interface MyRouteType extends RouterGetterRecord<RouteKeys> {
     value: string;
     params: {
       id: string;
+    };
+  };
+  other: {
+    value: string;
+    params: {
+      id: string;
+      key: string;
     };
   };
 }
@@ -21,6 +28,13 @@ const routes: MyRouteType = {
     value: '/profile/:id',
     params: {
       id: '',
+    },
+  },
+  other: {
+    value: '/other/:id/:key',
+    params: {
+      id: '',
+      key: '',
     },
   },
 };
@@ -50,5 +64,19 @@ describe('RouteGetterGenerator', () => {
     expect(rs.home.value).toBe(routes.home.value);
     const arr = appRoutes.asArray();
     expect(Array.isArray(arr)).toBeTruthy();
+  });
+
+  it.skip('doesnt thow error with empty string as param', () => {
+    expect(() => appRoutes.path('profile', { id: '' })).not.toThrow();
+  });
+  it('can handle multiple params', () => {
+    const id = 'myid';
+    const key = 'mykey';
+    const other = appRoutes.path('other', { id: id, key: key });
+    expect(other).toBe(`/other/${id}/${key}`);
+  });
+  it('gets the root path', () => {
+    const other = appRoutes.rootPath('other');
+    expect(other).toBe('/other');
   });
 });

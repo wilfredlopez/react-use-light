@@ -1,4 +1,5 @@
 import generatePath from './generatePath';
+import pathToRegex from './path-to-regexp';
 
 export type RouteGetterParams<T extends string | number | boolean | undefined> = T extends undefined
   ? undefined
@@ -57,8 +58,34 @@ export class RouteGetterGenerator<K extends string, RouteType extends RouterGett
     this._routes = routes;
   }
 
+  /**
+   *
+   * @param key key of the Route.
+   * @returns the value without the parameters.
+   * @example
+   * //for '/users/:id'
+   * rootPath('users-key') // returns '/users'
+   */
+  rootPath<Key extends keyof RouteType>(key: Key): string {
+    this.validateKey(key);
+    const route = this._routes[key];
+    try {
+      const path = pathToRegex.parse(route.value);
+      return path[0] as string;
+    } catch (error) {
+      return route.value;
+    }
+  }
+
   get routes(): RouteType {
     return Object.assign({}, this._routes) as RouteType;
+  }
+
+  private validateKey<K extends keyof RouteType>(pathKey: K): pathKey is K {
+    if (typeof this._routes[pathKey] === 'undefined') {
+      throw new Error(`RouteGetterGenerator: Invalid Key: ${pathKey}`);
+    }
+    return true;
   }
 
   /**
@@ -75,19 +102,23 @@ export class RouteGetterGenerator<K extends string, RouteType extends RouterGett
       return this.pathParams(key, params);
     }
 
-    if (typeof this._routes[key] === 'undefined') {
-      throw new Error(`RouteGetterGenerator: Invalid Key: ${key}`);
-    }
+    this.validateKey(key);
 
     return this._routes[key].value;
   }
 
   pathParams<Key extends keyof RouteType>(pathKey: Key, params: RouteType[Key]['params']) {
     let r = this._routes[pathKey];
-    if (typeof r === 'undefined') {
-      throw new Error(`RouteGetterGenerator: Invalid Key: ${pathKey}`);
+
+    this.validateKey(pathKey);
+
+    try {
+      const path = generatePath(r.value, params);
+      return path;
+    } catch (error) {
+      console.log(error);
+      return r.value;
     }
-    return generatePath(r.value, params);
   }
 
   get keys() {
