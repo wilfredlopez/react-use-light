@@ -1,19 +1,24 @@
 import generatePath from './generatePath';
 import pathToRegex from './path-to-regexp';
 
+export type ExtractKeys<T extends {}> = keyof T;
+export type StringKeys<T extends {}> = keyof T extends string ? keyof T : never;
+
 export type RouteGetterParams<T extends string | number | boolean | undefined> = T extends undefined
   ? undefined
   : {
       [paramName: string]: T;
     };
 
-export type RouterGetterRecord<T extends string> = Record<
-  T,
-  {
-    value: string;
-    params?: RouteGetterParams<any>;
-  }
->;
+interface RouteObject {
+  value: string;
+  params?: RouteGetterParams<any>;
+}
+export type RouterGetterRecord<T extends string> = {
+  [P in T]: RouteObject;
+};
+
+// export type RouterGetterRecord<T extends string> = Record<T, RouteObject>;
 
 /**
  * Generates Type Safed Routes for React Router or any other router.
@@ -22,20 +27,7 @@ export type RouterGetterRecord<T extends string> = Record<
  * //Creating Interfaces
  * type RouteKeys = 'home' | 'profile';
  *
- * interface RouteType extends RouterGetterRecord<RouteKeys> {
- *   home: {
- *     value: string;
- *   };
- *   profile: {
- *     value: string;
- *     params: {
- *       id: string;
- *     };
- *   };
- * }
- *
- * //Creating Instance
- * const appRoutes = new RouteGetterGenerator<RouteKeys, RouteType>({
+ * const routes: RouterGetterRecord<RouteKeys> = {
  *   home: {
  *     value: '/',
  *   },
@@ -45,14 +37,17 @@ export type RouterGetterRecord<T extends string> = Record<
  *       id: '',
  *     },
  *   },
- * });
+ * }
+ *
+ * //Creating Instance
+ * const appRoutes = new RouteGetterGenerator<RouteKeys>(routes);
  * //Using Instance with Type Safety
- * appRoutes.path('profile', { id: '1' });
+ * appRoutes.path('profile', { id: '1' }); // returns '/profile/1
  * // appRoutes.path('profile', { ss:'' }) // TypeError: Object literal may only specify known properties, and 'ss' does not exist in type '{ id: string; }'.ts(2345);
- * appRoutes.path('home');
+ * appRoutes.path('home'); // returns '/'
  * // appRoutes.path('other'); // Argument of type '"other"' is not assignable to parameter of type 'RouteKeys'.
  */
-export class RouteGetterGenerator<K extends string, RouteType extends RouterGetterRecord<K>> {
+export class RouteGetterGenerator<K extends string, RouteType extends RouterGetterRecord<K> = RouterGetterRecord<K>> {
   private _routes: RouteType;
   constructor(routes: RouteType) {
     this._routes = routes;

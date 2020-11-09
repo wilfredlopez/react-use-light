@@ -1,26 +1,7 @@
 import { RouteGetterGenerator, RouterGetterRecord } from '../src/index';
 type RouteKeys = 'home' | 'profile' | 'other';
 
-interface MyRouteType extends RouterGetterRecord<RouteKeys> {
-  home: {
-    value: string;
-  };
-  profile: {
-    value: string;
-    params: {
-      id: string;
-    };
-  };
-  other: {
-    value: string;
-    params: {
-      id: string;
-      key: string;
-    };
-  };
-}
-
-const routes: MyRouteType = {
+const routes: RouterGetterRecord<RouteKeys> = {
   home: {
     value: '/',
   },
@@ -40,7 +21,7 @@ const routes: MyRouteType = {
 };
 
 //Creating Instance
-const appRoutes = new RouteGetterGenerator<RouteKeys, MyRouteType>(routes);
+const appRoutes = new RouteGetterGenerator<RouteKeys>(routes);
 
 describe('RouteGetterGenerator', () => {
   it('Returns the correct path', () => {
