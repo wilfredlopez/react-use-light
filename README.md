@@ -97,6 +97,7 @@ export const useAppContext = createContextHook(AppContext, (context) => {
 
 - [`combineReducers`] - combines React.Reducer objects into 1.
 - [`SkeletonElement`] - React Skeleton Component.
+- [`createGlobalStyle`] - Creates global styles (appends to head). you can pass a string or an object with CSSProperties. eg. {body: {backgroundColor: 'red'}}
 
 ### React-Use Library Documentation
 
