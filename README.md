@@ -96,6 +96,7 @@ export const useAppContext = createContextHook(AppContext, (context) => {
 ### **Others**
 
 - [`combineReducers`] - combines React.Reducer objects into 1.
+- [`RoutePathGetter`] - Class to orginize the router paths of an application.
 - [`SkeletonElement`] - React Skeleton Component.
 - [`createGlobalStyle`] - Creates global styles (appends to head). you can pass a string or an object with CSSProperties. eg. {body: {backgroundColor: 'red'}}
 

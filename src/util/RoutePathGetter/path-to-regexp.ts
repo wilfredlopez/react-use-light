@@ -370,5 +370,4 @@ class PathToRegexGenerator {
   }
 }
 
-const pathToRegex = new PathToRegexGenerator();
-export default pathToRegex;
+export const pathToRegexp = new PathToRegexGenerator();

@@ -1,8 +1,12 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import useSetState from '../src/useSetState';
 
-const setUp = (initialState?: object) => renderHook(() => useSetState(initialState));
-
+const setUp = <T extends {}>(initialState?: T) => renderHook(() => useSetState(initialState));
+interface CounterI {
+  count: number;
+  foo: string;
+  someBool?: true;
+}
 it('should init state and setter', () => {
   const { result } = setUp({ foo: 'bar' });
   const [state, setState] = result.current;
@@ -18,11 +22,10 @@ it('should init empty state if not initial state provided', () => {
 });
 
 it('should merge changes into current state when providing object', () => {
-  const { result } = setUp({ foo: 'bar', count: 1 });
+  const { result } = setUp<CounterI>({ foo: 'bar', count: 1 });
   const [state, setState] = result.current;
 
   act(() => {
-    // @ts-ignore
     setState({ count: state.count + 1, someBool: true });
   });
 
@@ -30,12 +33,11 @@ it('should merge changes into current state when providing object', () => {
 });
 
 it('should merge changes into current state when providing function', () => {
-  const { result } = setUp({ foo: 'bar', count: 1 });
+  const { result } = setUp<CounterI>({ foo: 'bar', count: 1 });
   const [, setState] = result.current;
 
   act(() => {
-    // @ts-ignore
-    setState(prevState => ({ count: prevState.count + 1, someBool: true }));
+    setState((prevState) => ({ count: prevState.count + 1, someBool: true }));
   });
 
   expect(result.current[0]).toEqual({ foo: 'bar', count: 2, someBool: true });
@@ -57,4 +59,15 @@ it('should return a memoized setState callback', () => {
   const [, setState2] = result.current;
 
   expect(setState1).toBe(setState2);
+});
+
+it('resets state', () => {
+  const { result } = setUp<CounterI>({ foo: 'bar', count: 1 });
+  const [, , resetState] = result.current;
+  const resetTo = { count: 0, foo: 'newFoo' };
+  act(() => {
+    resetState(resetTo);
+  });
+
+  expect(result.current[0]).toEqual(resetTo);
 });

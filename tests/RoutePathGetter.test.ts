@@ -1,7 +1,6 @@
-import { RouteGetterGenerator, RouterGetterRecord } from '../src/index';
-type RouteKeys = 'home' | 'profile' | 'other';
+import { RoutePathGetter } from '../src/index';
 
-const routes: RouterGetterRecord<RouteKeys> = {
+const routes = {
   home: {
     value: '/',
   },
@@ -21,7 +20,7 @@ const routes: RouterGetterRecord<RouteKeys> = {
 };
 
 //Creating Instance
-const appRoutes = new RouteGetterGenerator<RouteKeys>(routes);
+const appRoutes = new RoutePathGetter(routes);
 
 describe('RouteGetterGenerator', () => {
   it('Returns the correct path', () => {
@@ -34,8 +33,8 @@ describe('RouteGetterGenerator', () => {
   });
   it('returns the path with the params', () => {
     const id = '123';
-    const profileRoute = appRoutes.path('profile', { id: id });
-    const profileRouteParams = appRoutes.pathParams('profile', { id: id });
+    const profileRoute = appRoutes.path('profile', { params: { id: id } });
+    const profileRouteParams = appRoutes.pathParams('profile', { params: { id: id } });
     const expected = `/profile/${id}`;
     expect(profileRoute).toBe(expected);
     expect(profileRouteParams).toBe(expected);
@@ -47,13 +46,13 @@ describe('RouteGetterGenerator', () => {
     expect(Array.isArray(arr)).toBeTruthy();
   });
 
-  it.skip('doesnt thow error with empty string as param', () => {
-    expect(() => appRoutes.path('profile', { id: '' })).not.toThrow();
+  it('doesnt thow error with empty string as param', () => {
+    expect(() => appRoutes.path('profile', { params: { id: '' } })).not.toThrow();
   });
   it('can handle multiple params', () => {
     const id = 'myid';
     const key = 'mykey';
-    const other = appRoutes.path('other', { id: id, key: key });
+    const other = appRoutes.path('other', { params: { id: id, key: key } });
     expect(other).toBe(`/other/${id}/${key}`);
   });
   it('gets the root path', () => {
