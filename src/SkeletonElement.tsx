@@ -4,13 +4,13 @@ export type SkeletonType = 'avatar' | 'text' | 'title' | 'thumbnail'
 
 
 
-export interface SkeletonProps extends React.PropsWithChildren<{}>{
+export interface SkeletonProps extends React.PropsWithChildren<{}> {
     type: SkeletonType
-    maxWidth?:string | number
+    maxWidth?: string | number
     size?: number | string
 }
 
-const SkeletonTypesCss:Record<SkeletonType, React.CSSProperties> = {
+const SkeletonTypesCss: Record<SkeletonType, React.CSSProperties> = {
     avatar: {
         width: 100,
         height: 100,
@@ -41,13 +41,12 @@ const SkeletonCss: React.CSSProperties = {
 
 }
 
-const SkeletonElement = ({type, maxWidth, size, children}: SkeletonProps) => {
+const SkeletonElement = ({ type, maxWidth, size, children }: SkeletonProps) => {
     const classes = `skeleton ${type}`
-    let styles:React.CSSProperties = {...SkeletonCss, ...SkeletonTypesCss[type], maxWidth: maxWidth}
-
-    if(size){
+    let styles: React.CSSProperties = { ...SkeletonCss, ...SkeletonTypesCss[type], maxWidth: maxWidth }
+    if (size) {
         styles.height = size
-        if(type !== 'title' && type !== 'text'){
+        if (type !== 'title' && type !== 'text') {
             styles.width = size
         }
     }
@@ -56,7 +55,7 @@ const SkeletonElement = ({type, maxWidth, size, children}: SkeletonProps) => {
     return (
 
         <div className={classes} style={styles}>
-           {children}
+            {children}
         </div>
     )
 }
