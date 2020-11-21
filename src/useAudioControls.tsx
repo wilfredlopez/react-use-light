@@ -39,11 +39,11 @@ export type useAudioContentProps =
     & Props
     & (AudioHTMLAttributes<HTMLAudioElement> | null)
 
-function turnSecondsToMinutes(s: number) {
+export function turnSecondsToMinutes(s: number) {
     return (s - (s %= 60)) / 60 + (9 < Math.round(s) ? ":" : ":0") + Math.round(s)
 }
 
-function turnSecondsToMinutesReverse(s: number, totalDuration: number) {
+export function turnSecondsToMinutesReverse(s: number, totalDuration: number) {
     return turnSecondsToMinutes(totalDuration - s)
 }
 

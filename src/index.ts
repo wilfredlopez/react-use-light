@@ -101,7 +101,7 @@ export { useHash } from './useHash';
 
 //CUSTOM HOOKS ONLY react-use-light
 export { default as useDate, formatDate } from './useDate';
-export { default as useAudioControls } from './useAudioControls';
+export { default as useAudioControls, HTMLMediaProps, HTMLMediaState, turnSecondsToMinutes, turnSecondsToMinutesReverse, useAudioContentProps } from './useAudioControls';
 export { default as SkeletonElement, SkeletonProps, SkeletonType } from './SkeletonElement';
 export { default as createContextHook } from './createContextHook';
 export { default as combineReducers } from './combineReducers';
