@@ -1,15 +1,18 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import useSetState from '../src/useSetState';
 
-const setUp = <T extends {}>(initialState?: T) => renderHook(() => useSetState(initialState));
+const setUp = <T extends {}>(initialState?: T) => renderHook(() => useSetState<T>(initialState as T));
 interface CounterI {
   count: number;
   foo: string;
-  someBool?: true;
+  someBool?: boolean;
 }
+
+
 it('should init state and setter', () => {
   const { result } = setUp({ foo: 'bar' });
   const [state, setState] = result.current;
+
 
   expect(state).toEqual({ foo: 'bar' });
   expect(setState).toBeInstanceOf(Function);
@@ -26,6 +29,8 @@ it('should merge changes into current state when providing object', () => {
   const [state, setState] = result.current;
 
   act(() => {
+
+
     setState({ count: state.count + 1, someBool: true });
   });
 
@@ -33,7 +38,7 @@ it('should merge changes into current state when providing object', () => {
 });
 
 it('should merge changes into current state when providing function', () => {
-  const { result } = setUp<CounterI>({ foo: 'bar', count: 1 });
+  const { result } = setUp({ foo: 'bar', count: 1 });
   const [, setState] = result.current;
 
   act(() => {
@@ -65,6 +70,7 @@ it('resets state', () => {
   const { result } = setUp<CounterI>({ foo: 'bar', count: 1 });
   const [, , resetState] = result.current;
   const resetTo = { count: 0, foo: 'newFoo' };
+
   act(() => {
     resetState(resetTo);
   });
