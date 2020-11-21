@@ -16,7 +16,7 @@ import throttle from "./throttle";
  *
  * @returns {Function} A new, debounced function.
  */
-export default function (delay: number, atBegin = false, callback: Function) {
+export default function debounce(delay: number, atBegin = false, callback: Function) {
   return callback === undefined
     ? throttle(delay, atBegin, false)
     : throttle(delay, callback, atBegin !== false);

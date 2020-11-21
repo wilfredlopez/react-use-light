@@ -14,7 +14,7 @@
  *
  * @returns {Function}  A new, throttled, function.
  */
-export default function (
+export default function  throttle(
   delay: number,
   noTrailing: boolean | Function | undefined = false,
   callback?: Function | boolean,

@@ -1,4 +1,4 @@
-export default function (): () => void {
+export default function toggleSelection(): () => void {
   let selection = document.getSelection();
   if (!selection || !selection.rangeCount) {
     return function () {};

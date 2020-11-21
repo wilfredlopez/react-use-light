@@ -20,7 +20,7 @@ interface CopyToClipboardOptions {
   message?: string;
 }
 
-export default function (text: string, options: CopyToClipboardOptions = {}) {
+export default function copyToClipboard (text: string, options: CopyToClipboardOptions = {}) {
   let debug: boolean,
     message: string,
     reselectPrevious: Function,

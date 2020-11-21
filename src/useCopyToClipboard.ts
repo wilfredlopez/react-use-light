@@ -64,7 +64,7 @@ const useCopyToClipboard = (): [
         noUserInteraction,
       });
     }
-  }, []);
+  }, [isMounted, setState]);
 
   return [state, copyToClipboard];
 };

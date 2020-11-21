@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useState } from 'react';
 import useEffectOnce from './useEffectOnce';
 import useIsomorphicLayoutEffect from './useIsomorphicLayoutEffect';

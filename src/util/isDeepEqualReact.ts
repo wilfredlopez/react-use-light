@@ -49,5 +49,6 @@ export function isDeepEqualReact(a: any, b: any) {
   }
 
   // true if both NaN, false otherwise
-  return a !== a && b !== b;
+  // return a !== a && b !== b;
+  return a !== b && b !== a;
 }

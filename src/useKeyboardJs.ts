@@ -16,7 +16,7 @@ const useKeyboardJs = (combination: string | string[]) => {
     return () => {
       keyboardJs.unbind(combination, down, up);
     };
-  }, [combination, keyboardJs]);
+  }, [combination]);
 
   return state;
 };

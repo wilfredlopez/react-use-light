@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 
-export default () => {
+export default function useMouseWheel() {
     const [mouseWheelScrolled, setMouseWheelScrolled] = useState(0)
     useEffect(()=>{
         const updateScroll = (e : MouseWheelEvent) => {

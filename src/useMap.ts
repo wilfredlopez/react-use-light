@@ -10,10 +10,11 @@ export interface StableActions<T extends object> {
 export interface Actions<T extends object> extends StableActions<T> {
   get: <K extends keyof T>(key: K) => T[K];
 }
-
+let initialMapStatic = {}
 const useMap = <T extends object = any>(
   initialMap: T = {} as T,
 ): [T, Actions<T>] => {
+  initialMapStatic = initialMap
   const [map, set] = useState<T>(initialMap);
 
   const stableActions = useMemo<StableActions<T>>(
@@ -33,7 +34,7 @@ const useMap = <T extends object = any>(
           return rest as T;
         });
       },
-      reset: () => set(initialMap),
+      reset: () => set(initialMapStatic as T),
     }),
     [set],
   );

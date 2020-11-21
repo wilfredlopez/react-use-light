@@ -53,72 +53,80 @@ const useAudioControls = (props: useAudioContentProps) => {
     const audioEl = <MyAudio {...props} ref={audioRef} />
     const currentAudioTimeRef = React.useRef("0")
     const currentAudioTimeLeftRef = React.useRef("0")
-    let lockPlay: boolean = false
+    const [timeState, setTimeState] = React.useState(0)
+    const [durationState, setDurationState] = React.useState(0)
+    const [percentPlayed, setPercentPlayed] = React.useState(0)
+    const [volumeState, setVolumeState] = React.useState(1)
+    const [muteState, setMuteState] = React.useState(false)
+    const [pausedState, setPausedState] = React.useState(true)
 
-    const controls = {
-        play: () => {
-            const eleme = audioRef.current
-            if (!eleme) {
-                return
-            }
-            if (!lockPlay) {
-                const promise = eleme.play()
-                const isPromise = typeof promise === "object"
+    const controls = React.useMemo(() => {
+        let lockPlay: boolean = false
 
-                if (isPromise) {
-                    lockPlay = true
-                    const resetLock = () => {
-                        lockPlay = false
-                    }
-                    promise.then(resetLock, resetLock)
+        return {
+            play: () => {
+                const eleme = audioRef.current
+                if (!eleme) {
+                    return
                 }
+                if (!lockPlay) {
+                    const promise = eleme.play()
+                    const isPromise = typeof promise === "object"
 
-                return promise
-            }
-            return undefined
+                    if (isPromise) {
+                        lockPlay = true
+                        const resetLock = () => {
+                            lockPlay = false
+                        }
+                        promise.then(resetLock, resetLock)
+                    }
 
-        },
-        mute: () => {
-            if (audioRef.current) {
-                audioRef.current.muted = true
-            }
-        },
-        pause: () => {
-            const el = audioRef.current
-            if (el && !lockPlay) {
-                return el.pause()
-            }
-        },
-        seek: (time: number) => {
-            function audioSeak(value: number) {
-                var seekto = durationState * (value / 100)
-                if (isNaN(seekto)) {
-                    {
+                    return promise
+                }
+                return undefined
+
+            },
+            mute: () => {
+                if (audioRef.current) {
+                    audioRef.current.muted = true
+                }
+            },
+            pause: () => {
+                const el = audioRef.current
+                if (el && !lockPlay) {
+                    return el.pause()
+                }
+            },
+            seek: (time: number) => {
+                function audioSeak(value: number) {
+                    const seekto = durationState * (value / 100)
+                    if (isNaN(seekto)) {
                         audioRef.current!.currentTime = 0
+                    } else {
+                        audioRef.current!.currentTime = seekto
                     }
-                } else {
-
-                    audioRef.current!.currentTime = seekto
                 }
-            }
 
-            audioSeak(time)
-        },
-        unmute: () => {
-            if (audioRef.current) {
-                audioRef.current.muted = false
-            }
-        },
-        volume: (volume: number) => {
-            const el = audioRef.current
-            if (!el) {
-                return
-            }
-            volume = Math.min(1, Math.max(0, volume))
-            el.volume = volume
-            setVolumeState(volume)
-        },
-    }
+                audioSeak(time)
+            },
+            unmute: () => {
+                const el = audioRef.current
+                if (el) {
+                    el.muted = false
+                }
+            },
+            volume: (volume: number) => {
+                const el = audioRef.current
+                if (!el) {
+                    return
+                }
+                volume = Math.min(1, Math.max(0, volume))
+                el.volume = volume
+                setVolumeState(volume)
+            },
+        }
+    }, [audioRef, durationState])
+
 
     const [
         bufferedState,
@@ -126,12 +134,7 @@ const useAudioControls = (props: useAudioContentProps) => {
     ] = React.useState<TimeRangeType[]>([])
 
 
-    const [timeState, setTimeState] = React.useState(0)
-    const [durationState, setDurationState] = React.useState(0)
-    const [percentPlayed, setPercentPlayed] = React.useState(0)
-    const [volumeState, setVolumeState] = React.useState(1)
-    const [muteState, setMuteState] = React.useState(false)
-    const [pausedState, setPausedState] = React.useState(true)
+
 
     React.useEffect(() => {
         const audioFile = audioRef.current
@@ -143,7 +146,7 @@ const useAudioControls = (props: useAudioContentProps) => {
 
 
     const getPercentPlayed = React.useCallback(
-        function getPercentPlayed(secs: number) {
+        (secs: number) => {
             return secs * (100 / durationState)
         },
         [durationState],
@@ -177,15 +180,15 @@ const useAudioControls = (props: useAudioContentProps) => {
 
     const onPlay = () => setPausedState(false)
     const onPause = () => setPausedState(true)
-    const onVolumeChange = () => {
+    const onVolumeChange = React.useCallback(() => {
         const el = audioRef.current
         if (!el) {
             return
         }
         setMuteState(el.muted)
         setVolumeState(el.volume)
-    }
-    const onDurationChange = () => {
+    }, [audioRef])
+    const onDurationChange = React.useCallback(() => {
         const el = audioRef.current
         if (!el) {
             return
@@ -193,31 +196,42 @@ const useAudioControls = (props: useAudioContentProps) => {
         const { duration, buffered } = el
         setDurationState(duration)
         setBufferedState(parseTimeRanges(buffered))
-    }
-    const onTimeUpdate = () => {
+    }, [audioRef])
+
+    const onTimeUpdate = React.useCallback(() => {
         const el = audioRef.current
         if (!el) {
             return
         }
         setTimeState(el.currentTime)
         setPercentPlayed(getPercentPlayed(el.currentTime))
-    }
-    const onProgress = () => {
+    }, [audioRef, getPercentPlayed])
+
+    const onProgress = React.useCallback(() => {
         const el = audioRef.current
         if (!el) {
             return
         }
         setBufferedState(parseTimeRanges(el.buffered))
-    }
+    }, [audioRef])
 
-    const Listeners = {
+    // const Listeners = {
+    //     onPlay: wrapEvent(props.onPlay, onPlay),
+    //     onPause: wrapEvent(props.onPause, onPause),
+    //     onVolumeChange: wrapEvent(props.onVolumeChange, onVolumeChange),
+    //     onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
+    //     onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
+    //     onProgress: wrapEvent(props.onProgress, onProgress),
+    // }
+
+    const Listeners = React.useMemo(() => ({
         onPlay: wrapEvent(props.onPlay, onPlay),
         onPause: wrapEvent(props.onPause, onPause),
         onVolumeChange: wrapEvent(props.onVolumeChange, onVolumeChange),
         onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
         onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
         onProgress: wrapEvent(props.onProgress, onProgress),
-    }
+    }), [onDurationChange, onProgress, onTimeUpdate, onVolumeChange, props.onDurationChange, props.onPause, props.onPlay, props.onProgress, props.onTimeUpdate, props.onVolumeChange])
 
     //Initialize states
     React.useEffect(() => {
@@ -225,7 +239,7 @@ const useAudioControls = (props: useAudioContentProps) => {
         if (!el) {
             if (process.env.NODE_ENV !== "production") {
                 console.error(
-                    "useAudio() ref to <audio> element is empty at mount. " +
+                    "useAudioControls() ref to <audio> element is empty at mount. " +
                     "It seem you have not rendered the audio element, which it " +
                     "returns as the first argument const [audio] = useAudio(...).",
                 )
@@ -279,7 +293,6 @@ const useAudioControls = (props: useAudioContentProps) => {
         volume: volumeState,
     }
 
-    // const [state, setState] = React.useState();
 
     return [{ audio: audioEl, state, controls, ref: audioRef, currentAudioTimeRef, currentAudioTimeLeftRef }]
 }
