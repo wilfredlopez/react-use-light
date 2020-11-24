@@ -14,9 +14,15 @@
  *      }
  *  })
  */
+const prefix = '_create_global_style';
 
 export function createGlobalStyle(code: string | Record<string, React.CSSProperties>) {
   const styleEl = document.createElement('style');
+  const id = prefix + hash(JSON.stringify(code));
+  const existing = document.getElementById(id);
+  if (existing) {
+    existing.remove();
+  }
   let codeString = '';
   if (typeof code === 'string') {
     codeString = code;
@@ -28,6 +34,16 @@ export function createGlobalStyle(code: string | Record<string, React.CSSPropert
 
   styleEl.appendChild(codeEl);
   document.head.appendChild(styleEl);
+  return id;
+}
+
+function hash(str: string) {
+  let hashText = 5381,
+    i = str.length;
+
+  while (i) hashText = (hashText * 33) ^ str.charCodeAt(--i);
+
+  return '_' + (hashText >>> 0).toString(36);
 }
 
 const KEBAB_REGEX = /[A-Z]/g;
