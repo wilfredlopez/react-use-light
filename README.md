@@ -99,6 +99,7 @@ export const useAppContext = createContextHook(AppContext, (context) => {
 - [`RoutePathGetter`] - Class to orginize the router paths of an application.
 - [`SkeletonElement`] - React Skeleton Component.
 - [`createGlobalStyle`] - Creates global styles (appends to head). you can pass a string or an object with CSSProperties. eg. {body: {backgroundColor: 'red'}}
+- [`removeGlobalStyle`] - Removes global styles by id. (id returned by createGlobalStyle)
 
 ### React-Use Library Documentation
 
