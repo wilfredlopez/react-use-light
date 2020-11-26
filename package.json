@@ -1,6 +1,6 @@
 {
   "name": "react-use-light",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "React use without external dependencies.",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -80,44 +80,44 @@
   },
   "config": {
     "commitizen": {
-        "path": "git-cz"
+      "path": "git-cz"
     }
-},
-"husky": {
-  "hooks": {
+  },
+  "husky": {
+    "hooks": {
       "pre-commit": "yarn lint:types && lint-staged",
       "pre-push": "yarn lint && yarn clean && yarn build && yarn test"
-  }
-},
-"release": {
-  "branches": [
+    }
+  },
+  "release": {
+    "branches": [
       "master",
       {
-          "name": "next",
-          "prerelease": "rc"
+        "name": "next",
+        "prerelease": "rc"
       }
-  ],
-  "verifyConditions": [
+    ],
+    "verifyConditions": [
       "@semantic-release/changelog",
       "@semantic-release/npm",
       "@semantic-release/git"
-  ],
-  "prepare": [
+    ],
+    "prepare": [
       "@semantic-release/changelog",
       "@semantic-release/npm",
       "@semantic-release/git"
-  ]
-},
-"lint-staged": {
-  "src/**/*.{ts,tsx}": [
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
       "eslint --fix",
       "git add"
-  ]
-},
-"volta": {
-  "node": "10.22.0",
-  "yarn": "1.22.4"
-},
+    ]
+  },
+  "volta": {
+    "node": "10.22.0",
+    "yarn": "1.22.4"
+  },
   "jest": {
     "preset": "ts-jest",
     "clearMocks": true,
