@@ -100,6 +100,15 @@ export const useAppContext = createContextHook(AppContext, (context) => {
 - [`SkeletonElement`] - React Skeleton Component.
 - [`createGlobalStyle`] - Creates global styles (appends to head). you can pass a string or an object with CSSProperties. eg. {body: {backgroundColor: 'red'}}
 - [`removeGlobalStyle`] - Removes global styles by id. (id returned by createGlobalStyle)
+- [useThemeStyles] - toggles between theme styles. 'dark'|'light'. see example
+
+```ts
+const [theme, setTheme, toggleTheme] = useThemeStyles(
+  'light', // default theme
+  `:root{--app-color: black;}` // dark styles,
+  `:root{--app-color: white;}` // light styles
+);
+```
 
 ### React-Use Library Documentation
 
@@ -207,3 +216,7 @@ export const useAppContext = createContextHook(AppContext, (context) => {
   - [`useMethods`](https://github.com/streamich/react-use/blob/master/docs/useMethods.md) &mdash; neat alternative to `useReducer`. [![][img-demo]](https://streamich.github.io/react-use/?path=/story/state-usemethods--demo)
     <br/>
     <br/>
+
+```
+
+```
