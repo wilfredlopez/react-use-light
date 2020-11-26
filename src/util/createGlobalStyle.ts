@@ -1,3 +1,4 @@
+const prefix = '_create_global_style';
 /**
  * Creates CSS Styles and appends it to the document's head.
  * @param code css to to append to head as <style></style>
@@ -13,16 +14,12 @@
  *      backgroundColor: 'red'
  *      }
  *  })
+ * @returns id of the style tag.
  */
-const prefix = '_create_global_style';
-
 export function createGlobalStyle(code: string | Record<string, React.CSSProperties>) {
   const styleEl = document.createElement('style');
   const id = prefix + hash(JSON.stringify(code));
-  const existing = document.getElementById(id);
-  if (existing) {
-    existing.remove();
-  }
+  removeGlobalStyle(id);
   let codeString = '';
   if (typeof code === 'string') {
     codeString = code;
@@ -31,10 +28,23 @@ export function createGlobalStyle(code: string | Record<string, React.CSSPropert
   }
   const codeEl = document.createTextNode(codeString);
   styleEl.type = 'text/css';
-
+  styleEl.id = id;
   styleEl.appendChild(codeEl);
   document.head.appendChild(styleEl);
   return id;
+}
+
+/**
+ *
+ * @param id element id returns by createGlobalStyle
+ */
+export function removeGlobalStyle(id: string) {
+  const existing = document.getElementById(id);
+  if (existing) {
+    existing.remove();
+    return true;
+  }
+  return false;
 }
 
 function hash(str: string) {
