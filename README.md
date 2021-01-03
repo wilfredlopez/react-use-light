@@ -93,6 +93,112 @@ export const useAppContext = createContextHook(AppContext, (context) => {
 });
 ```
 
+### CreateContextReducer
+
+<p>Creates a React Reducer and a React Context and returns useContext hook, Context and Context Provider. Make sure to provide the state type and actions type if you are using typescript.
+</p>
+
+```ts
+const [ContextProvider, useContext, Context] = createContextReducer<AppState, Actions>();
+```
+
+<p>The Context Provider accepts the initial state and the reducer function.</p>
+<p>The context hook returns and array with the state and the dispatch function [state, dispatch]</p>
+
+```tsx
+import { createContextReducer, Action } from 'react-use-light';
+import { useState } from 'react';
+
+// CREATE STATE TYPE
+interface AppState {
+  notes: string[];
+  user: User | undefined;
+}
+
+//CREATE ACTIONS TYPE (Should extend Action interface >> {type:string, payload?:any})
+type Actions = SetUserAction | SetNotesAction;
+
+interface SetUserAction extends Action {
+  type: 'SET_USER';
+  payload: User | undefined;
+}
+
+interface SetNotesAction extends Action {
+  type: 'SET_NOTES';
+  payload: string[];
+}
+interface User {
+  name: string;
+  email: string;
+}
+
+//Pass the State Type and Actions Type to the create function in order to get a properly typed context.
+// @returns >>> [ContextProvider, ContextHook, and Context]
+const [AppContextProvider, useAppContext, AppContext] = createContextReducer<AppState, Actions>();
+
+//create state reducer for the defined types
+const reducer = (state: AppState, action: Actions): AppState => {
+  switch (action.type) {
+    case 'SET_NOTES':
+      return { ...state, notes: action.payload };
+    case 'SET_USER':
+      return { ...state, user: action.payload };
+    default:
+      return { ...state };
+  }
+};
+
+// initial state
+const initialState: AppState = {
+  notes: [],
+  user: undefined,
+};
+
+// USE ContextProvider by passing initial state and the reducer function.
+export function App() {
+  return (
+    <AppContextProvider initialState={initialState} reducer={reducer}>
+      <PageOne />
+    </AppContextProvider>
+  );
+}
+
+// Use in ContextProvider Children
+function PageOne() {
+  const [{ notes }, dispatch] = useAppContext();
+  const [note, setNote] = useState('');
+  function addNote() {
+    if (note && note.trim() !== '') {
+      dispatch({
+        type: 'SET_NOTES',
+        payload: [...notes, note],
+      });
+      setNote('');
+    }
+  }
+  return (
+    <div>
+      <h1>Inside Context</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          addNote();
+        }}
+      >
+        <div>
+          <input placeholder="add note" value={note} onChange={(e) => setNote(e.target.value)} />
+        </div>
+      </form>
+      <div>
+        {notes.map((n) => (
+          <p key={n}>{n}</p>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
 ### **Others**
 
 - [`combineReducers`] - combines React.Reducer objects into 1.
