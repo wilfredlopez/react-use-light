@@ -119,3 +119,4 @@ export { default as createContextReducer, Action, AppContextProviderProps } from
 export { ErrorBoundary } from './util/ErrorBoundary'
 export { debounceFunction } from './util/debounceFunction'
 export { throttleFunction } from './util/throttleFunction'
+export { default as useDebounceFunction } from './useDebounceFunction'
