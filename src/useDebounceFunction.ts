@@ -12,6 +12,6 @@ export default function useDebounceFunction<T extends (...args: any[]) => any>(
     deps: DependencyList = [],
     options: DebounceOptions = {}
 ) {
-    const func = useMemo(() => debounceFunction(fn, ms, options), deps)
+    const func = useMemo(() => debounceFunction(fn, ms, options), [...deps, fn, ms, options])
     return [func, func.cancel, func.pending] as const
 }
