@@ -4,7 +4,7 @@ export function throttleFunction<T extends (...args: any[]) => any>(
     scope?: any,
 ) {
     threshhold || (threshhold = 250)
-    let last: number, deferTimer: NodeJS.Timeout
+    let last: number, deferTimer: NodeJS.Timeout | number
     return function () {
         var context: Window | any = scope || window // this was actually "this"
 
@@ -12,7 +12,7 @@ export function throttleFunction<T extends (...args: any[]) => any>(
             args: any[] = arguments as any
         if (last && now < last + threshhold) {
             // hold on to it
-            clearTimeout(deferTimer)
+            clearTimeout(deferTimer as any)
             deferTimer = setTimeout(function () {
                 last = now
                 fn.apply(context, args)
