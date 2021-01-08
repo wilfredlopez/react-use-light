@@ -116,3 +116,4 @@ export { RoutePathGetter, RouteGetterParams, RouterGetterRecord, RouteObject } f
 export { createGlobalStyle, removeGlobalStyle } from './util/createGlobalStyle'
 export { useThemeStyles } from './useThemeStyles'
 export { default as createContextReducer, Action, AppContextProviderProps } from './createContextReducer'
+export { ErrorBoundary } from './util/ErrorBoundary'

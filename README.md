@@ -207,6 +207,7 @@ function PageOne() {
 - [`createGlobalStyle`] - Creates global styles (appends to head). you can pass a string or an object with CSSProperties. eg. {body: {backgroundColor: 'red'}}
 - [`removeGlobalStyle`] - Removes global styles by id. (id returned by createGlobalStyle)
 - [`useThemeStyles`] - toggles between theme styles. 'dark'|'light'. see example
+- [`ErrorBoundary`] - Error Boundary Component
 
 ```ts
 const [theme, setTheme, toggleTheme] = useThemeStyles(
