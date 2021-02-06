@@ -13,5 +13,6 @@ export default function useDebounceFunction<T extends (...args: any[]) => any>(
     options: DebounceOptions = {}
 ) {
     const func = useMemo(() => debounceFunction(fn, ms, options), [...deps, fn, ms, options])
+    //eslint-disable-next-line
     return [func, func.cancel, func.pending] as const
 }
