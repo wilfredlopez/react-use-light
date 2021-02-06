@@ -120,3 +120,6 @@ export { ErrorBoundary } from './util/ErrorBoundary'
 export { debounceFunction } from './util/debounceFunction'
 export { throttleFunction } from './util/throttleFunction'
 export { default as useDebounceFunction } from './useDebounceFunction'
+
+export { RefsTypeMap, UseModelProps, useRefModel } from './custom-hooks/useModel'
+export { pick } from './util/pick'
