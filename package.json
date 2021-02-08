@@ -1,6 +1,6 @@
 {
   "name": "react-use-light",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "React use without external dependencies.",
   "main": "lib/index.js",
   "module": "esm/index.js",
