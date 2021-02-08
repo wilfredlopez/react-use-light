@@ -25,8 +25,7 @@ export { default as useIdle } from './useIdle'
 export { default as useInterval } from './useInterval'
 export { default as useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 export { default as useKey } from './useKey'
-// not exported because of peer dependency
-export { default as useKeyboardJs } from './useKeyboardJs'
+
 export { default as useKeyPress } from './useKeyPress'
 export { default as useKeyPressEvent } from './useKeyPressEvent'
 export { default as useLatest } from './useLatest'
@@ -69,8 +68,6 @@ export { default as useSetState } from './useSetState'
 export { default as useSize } from './useSize'
 export { default as useSlider } from './useSlider'
 export { default as useSpeech } from './useSpeech'
-// not exported because of peer dependency
-export { default as useSpring } from './useSpring'
 export { default as useStartTyping } from './useStartTyping'
 export { useStateWithHistory } from './useStateWithHistory'
 export { default as useStateList } from './useStateList'
@@ -96,7 +93,26 @@ export { default as useSet } from './useSet'
 export { createGlobalState } from './createGlobalState'
 export { useHash } from './useHash'
 
-//CUSTOM HOOKS ONLY react-use-light
+
+/**
+ * WITH PEER DEPENDENCIES
+ * Hooks Not exported because of peer dependency
+ */
+/**
+ * @use 
+ * import useSpring from 'react-use-light/lib/useSpring'
+ */
+// export { default as useSpring } from './useSpring'
+/**
+ * @use 
+ * import useKeyboardJs from 'react-use-light/lib/useKeyboardJs';
+ */
+// export { default as useKeyboardJs } from './useKeyboardJs'
+
+/**
+ * CUSTOM HOOKS 
+ * only react-use-light
+ */
 export { default as useDate, formatDate } from './useDate'
 export {
   default as useAudioControls,

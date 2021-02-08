@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { keyboardJs } from "./util/keyboard"
+import { keyboardJs } from 'keyboardjs'
 
 const useKeyboardJs = (combination: string | string[]) => {
   const [state, set] = useState<[boolean, null | KeyboardEvent]>([false, null])
