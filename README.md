@@ -206,16 +206,19 @@ function PageOne() {
 - [`SkeletonElement`] - React Skeleton Component.
 - [`createGlobalStyle`] - Creates global styles (appends to head). you can pass a string or an object with CSSProperties. eg. {body: {backgroundColor: 'red'}}
 - [`removeGlobalStyle`] - Removes global styles by id. (id returned by createGlobalStyle)
-- [`useThemeStyles`] - toggles between theme styles. 'dark'|'light'. see example
 - [`ErrorBoundary`] - Error Boundary Component
+- [`useDebounceFunction`] - Debouce Function for React
+- [`pick`, `debounceFunction`, `throttleFunction` , `rgbToHex`, `degreesToRadians`, `hexToRGB`, `interpolateColor`, `radiansToDegrees`, `removeFirst`] - Utility functions.
+- [`useRefModel`] - creates form elements 2 way binding on the value.
+- [`useThemeStyles`] - toggles between theme styles. 'dark'|'light'. see example
 
-```ts
-const [theme, setTheme, toggleTheme] = useThemeStyles(
-  'light', // default theme
-  `:root{--app-color: black;}` // dark styles,
-  `:root{--app-color: white;}` // light styles
-);
-```
+  ```ts
+  const [theme, setTheme, toggleTheme] = useThemeStyles(
+    'light', // default theme
+    `:root{--app-color: black;}` // dark styles,
+    `:root{--app-color: white;}` // light styles
+  );
+  ```
 
 ### React-Use Library Documentation
 
@@ -227,6 +230,12 @@ const [theme, setTheme, toggleTheme] = useThemeStyles(
   - [`useHash`](https://github.com/streamich/react-use/blob/master/docs/useHash.md) &mdash; tracks location hash value. [![][img-demo]](https://streamich.github.io/react-use/?path=/story/sensors-usehash--demo)
   - [`useIdle`](https://github.com/streamich/react-use/blob/master/docs/useIdle.md) &mdash; tracks whether user is being inactive.
   - [`useKey`](https://github.com/streamich/react-use/blob/master/docs/useKey.md), [`useKeyPress`](https://github.com/streamich/react-use/blob/master/docs/useKeyPress.md), and [`useKeyPressEvent`](https://github.com/streamich/react-use/blob/master/docs/useKeyPressEvent.md) &mdash; track keys. [![][img-demo]](https://streamich.github.io/react-use/?path=/story/sensors-usekeypressevent--demo)
+  - [`useKeyboardJs`] &mdash; detects complex key combos like detecting when multiple keys are held down at the same. Needs to be imported directly because of dependency on `keyboardjs`. <br/>
+
+    ```ts
+    import useKeyboardJs from 'react-use-light/esm/useKeyboardJs';
+    ```
+
   - [`useLocation`](https://github.com/streamich/react-use/blob/master/docs/useLocation.md) and [`useSearchParam`](https://github.com/streamich/react-use/blob/master/docs/useSearchParam.md) &mdash; tracks page navigation bar location state.
   - [`useLongPress`](https://github.com/streamich/react-use/blob/master/docs/useLongPress.md) &mdash; tracks long press gesture of some element.
   - [`useMedia`](https://github.com/streamich/react-use/blob/master/docs/useMedia.md) &mdash; tracks state of a CSS media query. [![][img-demo]](https://streamich.github.io/react-use/?path=/story/sensors-usemedia--demo)
@@ -260,13 +269,18 @@ const [theme, setTheme, toggleTheme] = useThemeStyles(
     <br/>
     <br/>
 - [**Animations**](https://github.com/streamich/react-use/blob/master/docs/Animations.md)
+
   - [`useRaf`](https://github.com/streamich/react-use/blob/master/docs/useRaf.md) &mdash; re-renders component on each `requestAnimationFrame`.
   - [`useInterval`](https://github.com/streamich/react-use/blob/master/docs/useInterval.md) and [`useHarmonicIntervalFn`](https://github.com/streamich/react-use/blob/master/docs/useHarmonicIntervalFn.md) &mdash; re-renders component on a set interval using `setInterval`.
   - [`useTimeout`](https://github.com/streamich/react-use/blob/master/docs/useTimeout.md) &mdash; re-renders component after a timeout.
   - [`useTimeoutFn`](https://github.com/streamich/react-use/blob/master/docs/useTimeoutFn.md) &mdash; calls given function after a timeout. [![][img-demo]](https://streamich.github.io/react-use/?path=/story/animation-usetimeoutfn--demo)
   - [`useUpdate`](https://github.com/streamich/react-use/blob/master/docs/useUpdate.md) &mdash; returns a callback, which re-renders component when called.
-    <br/>
-    <br/>
+  - [`useSpring`] — interpolates number over time according to spring dynamics. Needs to be imported directly because of dependency on `rebound`.
+
+    ```ts
+    import useSpring from 'react-use-light/esm/useSpring';
+    ```
+
 - [**Side-effects**](https://github.com/streamich/react-use/blob/master/docs/Side-effects.md)
 
   - [`useAsync`](https://github.com/streamich/react-use/blob/master/docs/useAsync.md), [`useAsyncFn`](https://github.com/streamich/react-use/blob/master/docs/useAsyncFn.md), and [`useAsyncRetry`](https://github.com/streamich/react-use/blob/master/docs/useAsyncRetry.md) &mdash; resolves an `async` function.
@@ -323,7 +337,3 @@ const [theme, setTheme, toggleTheme] = useThemeStyles(
   - [`useMethods`](https://github.com/streamich/react-use/blob/master/docs/useMethods.md) &mdash; neat alternative to `useReducer`. [![][img-demo]](https://streamich.github.io/react-use/?path=/story/state-usemethods--demo)
     <br/>
     <br/>
-
-```
-
-```
