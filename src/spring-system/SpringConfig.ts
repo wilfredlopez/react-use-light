@@ -1,5 +1,5 @@
 
-import * as OrigamiValueConverter from './OrigamiValueConverter'
+import { frictionFromOrigamiValue, tensionFromOrigamiValue } from './OrigamiValueConverter'
 import Bouncy from './BouncyConversion'
 
 
@@ -18,8 +18,8 @@ class SpringConfig {
         friction: number,
     ): SpringConfig {
         return new SpringConfig(
-            OrigamiValueConverter.tensionFromOrigamiValue(tension),
-            OrigamiValueConverter.frictionFromOrigamiValue(friction),
+            tensionFromOrigamiValue(tension),
+            frictionFromOrigamiValue(friction),
         )
     }
 
@@ -43,7 +43,7 @@ class SpringConfig {
     static coastingConfigWithOrigamiFriction(friction: number): SpringConfig {
         return new SpringConfig(
             0,
-            OrigamiValueConverter.frictionFromOrigamiValue(friction),
+            frictionFromOrigamiValue(friction),
         )
     }
 

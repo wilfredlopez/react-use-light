@@ -1,6 +1,6 @@
 
 import type SpringSystem from './SpringSystem'
-import * as util from './util'
+import { onFrame } from './util'
 import { Looper } from './types'
 
 
@@ -10,7 +10,7 @@ export class LooperAnimation implements Looper {
     run() {
         const springSystem = getSpringSystem.call(this)
 
-        util.onFrame(() => {
+        onFrame(() => {
             springSystem.loop(Date.now())
         })
     }

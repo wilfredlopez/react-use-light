@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { keyboardJs } from "./util/keyboard";
+import { useEffect, useState } from "react"
+import { keyboardJs } from "./util/keyboard"
 
 const useKeyboardJs = (combination: string | string[]) => {
-  const [state, set] = useState<[boolean, null | KeyboardEvent]>([false, null]);
+  const [state, set] = useState<[boolean, null | KeyboardEvent]>([false, null])
 
   useEffect(() => {
     if (!keyboardJs) {
-      return;
+      return
     }
 
-    const down = (event) => set([true, event]);
-    const up = (event) => set([false, event]);
-    keyboardJs.bind(combination, down, up, true);
+    const down = (event) => set([true, event])
+    const up = (event) => set([false, event])
+    keyboardJs.bind(combination, down, up, true)
 
     return () => {
-      keyboardJs.unbind(combination, down, up);
-    };
-  }, [combination]);
+      keyboardJs.unbind(combination, down, up)
+    }
+  }, [combination])
 
-  return state;
-};
+  return state
+}
 
-export default useKeyboardJs;
+export default useKeyboardJs

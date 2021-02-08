@@ -1,5 +1,5 @@
 
-import * as util from './util'
+import { hexToRGB, rgbToHex } from './util'
 
 export function mapValueInRange(
     value: number,
@@ -31,8 +31,8 @@ export function interpolateColor(
     fromHigh: number = 1,
     asRGB = false,
 ): string {
-    const startColor = util.hexToRGB(startColorStr)
-    const endColor = util.hexToRGB(endColorStr)
+    const startColor = hexToRGB(startColorStr)
+    const endColor = hexToRGB(endColorStr)
     const r = Math.floor(
         mapValueInRange(val, fromLow, fromHigh, startColor.r, endColor.r),
     )
@@ -45,7 +45,7 @@ export function interpolateColor(
     if (asRGB) {
         return 'rgb(' + r + ',' + g + ',' + b + ')'
     } else {
-        return util.rgbToHex(r, g, b)
+        return rgbToHex(r, g, b)
     }
 }
 
