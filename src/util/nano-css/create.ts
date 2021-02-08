@@ -1,22 +1,20 @@
-// import {CreateNano} from './types/nano';
-import { NanoOptions, NanoRenderer } from "./types";
-// export const create: CreateNano;
+import type { NanoOptions, NanoRenderer } from "./types"
 
-const KEBAB_REGEX = /[A-Z]/g;
+const KEBAB_REGEX = /[A-Z]/g
 
 const hash = function (str: string) {
-  var hash = 5381, i = str.length;
+  var hash = 5381, i = str.length
 
-  while (i) hash = (hash * 33) ^ str.charCodeAt(--i);
+  while (i) hash = (hash * 33) ^ str.charCodeAt(--i)
 
-  return "_" + (hash >>> 0).toString(36);
-};
+  return "_" + (hash >>> 0).toString(36)
+}
 
-export function create(options?: NanoOptions): NanoRenderer;
+export function create(options?: NanoOptions): NanoRenderer
 export function create(config) {
-  config = config || {};
-  var assign = config.assign || Object.assign;
-  var client = typeof window === "object";
+  config = config || {}
+  var assign = config.assign || Object.assign
+  var client = typeof window === "object"
 
   // Check if we are really in browser environment.
   if (process.env.NODE_ENV !== "production") {
@@ -26,8 +24,8 @@ export function create(config) {
       ) {
         console.error(
           'nano-css detected browser environment because of "window" global, but ' +
-            '"document" global seems to be defective.',
-        );
+          '"document" global seems to be defective.',
+        )
       }
     }
   }
@@ -39,35 +37,35 @@ export function create(config) {
     assign: assign,
     stringify: JSON.stringify,
     kebab: function (prop) {
-      return prop.replace(KEBAB_REGEX, "-$&").toLowerCase();
+      return prop.replace(KEBAB_REGEX, "-$&").toLowerCase()
     },
     decl: function (key, value) {
-      key = renderer.kebab(key);
-      return key + ":" + value + ";";
+      key = renderer.kebab(key)
+      return key + ":" + value + ";"
     },
     hash: function (obj) {
-      return hash(renderer.stringify(obj));
+      return hash(renderer.stringify(obj))
     },
     selector: function (parent, selector) {
-      return parent + (selector[0] === ":" ? "" : " ") + selector;
+      return parent + (selector[0] === ":" ? "" : " ") + selector
     },
     putRaw: function (rawCssRule) {
-      renderer.raw += rawCssRule;
+      renderer.raw += rawCssRule
     },
-  }, config);
+  }, config)
 
   if (renderer.client) {
     if (!renderer.sh) {
-      document.head.appendChild(renderer.sh = document.createElement("style"));
+      document.head.appendChild(renderer.sh = document.createElement("style"))
     }
 
     if (process.env.NODE_ENV !== "production") {
-      renderer.sh.setAttribute("data-nano-css-dev", "");
+      renderer.sh.setAttribute("data-nano-css-dev", "")
 
       // Test style sheet used in DEV mode to test if .insetRule() would throw.
-      renderer.shTest = document.createElement("style");
-      renderer.shTest.setAttribute("data-nano-css-dev-tests", "");
-      document.head.appendChild(renderer.shTest);
+      renderer.shTest = document.createElement("style")
+      renderer.shTest.setAttribute("data-nano-css-dev-tests", "")
+      document.head.appendChild(renderer.shTest)
     }
 
     renderer.putRaw = function (rawCssRule) {
@@ -75,13 +73,13 @@ export function create(config) {
       // But CSS injected using .insertRule() is not displayed in Chrome Devtools,
       // that's why we use .appendChild in DEV.
       if (process.env.NODE_ENV === "production") {
-        var sheet = renderer.sh.sheet;
+        var sheet = renderer.sh.sheet
 
         // Unknown pseudo-selectors will throw, this try/catch swallows all errors.
         try {
-          sheet.insertRule(rawCssRule, sheet.cssRules.length);
+          sheet.insertRule(rawCssRule, sheet.cssRules.length)
           // eslint-disable-next-line no-empty
-        } catch (error) {}
+        } catch (error) { }
       } else {
         // Test if .insertRule() works in dev mode. Unknown pseudo-selectors will throw when
         // .insertRule() is used, but .appendChild() will not throw.
@@ -89,61 +87,61 @@ export function create(config) {
           renderer.shTest.sheet.insertRule(
             rawCssRule,
             renderer.shTest.sheet.cssRules.length,
-          );
+          )
         } catch (error) {
           if (config.verbose) {
-            console.error(error);
+            console.error(error)
           }
         }
 
         // Insert pretty-printed CSS for dev mode.
-        renderer.sh.appendChild(document.createTextNode(rawCssRule));
+        renderer.sh.appendChild(document.createTextNode(rawCssRule))
       }
-    };
+    }
   }
 
   renderer.put = function (selector, decls, atrule) {
-    let str = "";
-    let prop, value;
-    let postponed: any[] = [];
+    let str = ""
+    let prop, value
+    let postponed: any[] = []
 
     for (prop in decls) {
-      value = decls[prop];
+      value = decls[prop]
 
       if ((value instanceof Object) && !(value instanceof Array)) {
-        postponed.push(prop);
+        postponed.push(prop)
       } else {
         if ((process.env.NODE_ENV !== "production") && !renderer.sourcemaps) {
-          str += "    " + renderer.decl(prop, value, selector, atrule) + "\n";
+          str += "    " + renderer.decl(prop, value, selector, atrule) + "\n"
         } else {
-          str += renderer.decl(prop, value, selector, atrule);
+          str += renderer.decl(prop, value, selector, atrule)
         }
       }
     }
 
     if (str) {
       if ((process.env.NODE_ENV !== "production") && !renderer.sourcemaps) {
-        str = "\n" + selector + " {\n" + str + "}\n";
+        str = "\n" + selector + " {\n" + str + "}\n"
       } else {
-        str = selector + "{" + str + "}";
+        str = selector + "{" + str + "}"
       }
-      renderer.putRaw(atrule ? atrule + "{" + str + "}" : str);
+      renderer.putRaw(atrule ? atrule + "{" + str + "}" : str)
     }
 
     for (var i = 0; i < postponed.length; i++) {
-      prop = postponed[i];
+      prop = postponed[i]
 
       if (prop[0] === "@" && prop !== "@font-face") {
-        renderer.putAt(selector, decls[prop], prop);
+        renderer.putAt(selector, decls[prop], prop)
       } else {
-        renderer.put(renderer.selector(selector, prop), decls[prop], atrule);
+        renderer.put(renderer.selector(selector, prop), decls[prop], atrule)
       }
     }
-  };
+  }
 
-  renderer.putAt = renderer.put;
+  renderer.putAt = renderer.put
 
-  return renderer;
+  return renderer
 }
 
-export default create;
+export default create

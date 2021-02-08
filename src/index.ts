@@ -16,12 +16,9 @@ export { default as useDefault } from './useDefault'
 export { default as useDrop } from './useDrop'
 export { default as useDropArea } from './useDropArea'
 export { default as useEffectOnce } from './useEffectOnce'
-
 export { default as useEvent } from './useEvent'
-
 export { default as useGeolocation } from './useGeolocation'
 export { default as useGetSet } from './useGetSet'
-
 export { default as useHover } from './useHover'
 export { default as useHoverDirty } from './useHoverDirty'
 export { default as useIdle } from './useIdle'
@@ -29,7 +26,7 @@ export { default as useInterval } from './useInterval'
 export { default as useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 export { default as useKey } from './useKey'
 // not exported because of peer dependency
-// export { default as useKeyboardJs } from './useKeyboardJs';
+export { default as useKeyboardJs } from './useKeyboardJs'
 export { default as useKeyPress } from './useKeyPress'
 export { default as useKeyPressEvent } from './useKeyPressEvent'
 export { default as useLatest } from './useLatest'
@@ -73,7 +70,7 @@ export { default as useSize } from './useSize'
 export { default as useSlider } from './useSlider'
 export { default as useSpeech } from './useSpeech'
 // not exported because of peer dependency
-// export { default as useSpring } from './useSpring';
+export { default as useSpring } from './useSpring'
 export { default as useStartTyping } from './useStartTyping'
 export { useStateWithHistory } from './useStateWithHistory'
 export { default as useStateList } from './useStateList'
@@ -112,14 +109,13 @@ export {
 export { default as SkeletonElement, SkeletonProps, SkeletonType } from './SkeletonElement'
 export { default as createContextHook } from './createContextHook'
 export { default as combineReducers } from './combineReducers'
-export { RoutePathGetter, RouteGetterParams, RouterGetterRecord, RouteObject } from './util/RoutePathGetter'
-export { createGlobalStyle, removeGlobalStyle } from './util/createGlobalStyle'
+
 export { useThemeStyles } from './useThemeStyles'
 export { default as createContextReducer, Action, AppContextProviderProps } from './createContextReducer'
-export { ErrorBoundary } from './util/ErrorBoundary'
-export { debounceFunction } from './util/debounceFunction'
-export { throttleFunction } from './util/throttleFunction'
 export { default as useDebounceFunction } from './useDebounceFunction'
 
 export { RefsTypeMap, UseModelProps, useRefModel } from './custom-hooks/useModel'
-export { pick } from './util/pick'
+export { pick, debounceFunction, throttleFunction, ErrorBoundary } from './util'
+export { createGlobalStyle, removeGlobalStyle } from './util/createGlobalStyle'
+export { RoutePathGetter, RouteGetterParams, RouterGetterRecord, RouteObject } from './util/RoutePathGetter'
+export { rgbToHex, degreesToRadians, hexToRGB, interpolateColor, radiansToDegrees, removeFirst } from './spring-system'
