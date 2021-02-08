@@ -100,12 +100,12 @@ export { useHash } from './useHash'
  */
 /**
  * @use 
- * import useSpring from 'react-use-light/lib/useSpring'
+ * import useSpring from 'react-use-light/esm/useSpring'
  */
 // export { default as useSpring } from './useSpring'
 /**
  * @use 
- * import useKeyboardJs from 'react-use-light/lib/useKeyboardJs';
+ * import useKeyboardJs from 'react-use-light/esm/useKeyboardJs';
  */
 // export { default as useKeyboardJs } from './useKeyboardJs'
 
